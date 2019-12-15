@@ -4,11 +4,12 @@ class StrokeLine {
 
     this.reg = new RegExp('^touch');
     this.canvas = document.getElementById(id);
-    this.ctx = null;
+    this.ctx = this.canvas.getContext('2d');
     this.frameId = null;
     this.last = { x: 0, y: 0 };
     this.queue = [];
     this.drawing = false;
+    this.setDrawType('draw');
 
     this.initContext(options.contextOptions || {});
     this.setEvents();
@@ -30,10 +31,10 @@ class StrokeLine {
   }
 
   stop() {
+    this.resetDrawData();
     if (this.frameId) {
       const cancelAnimateFrame = window.cancelAnimationFrame
         || window.clearTimeout;
-      this.resetDrawData();
       cancelAnimateFrame(this.frameId);
     }
   }
@@ -48,14 +49,22 @@ class StrokeLine {
     return this.canvas.toDataURL();
   }
 
+  setDrawType(type) {
+    this.drawType = type;
+
+    if (type === 'elase') {
+      this.ctx.globalCompositeOperation = 'destination-out';
+    } else {
+      this.ctx.globalCompositeOperation = 'source-over';
+    }
+  }
+
   clearCanvas() {
     this.canvas.width = this.canvas.width;
   }
 
   initContext(options) {
     if (!options) options = {};
-
-    this.ctx = this.canvas.getContext('2d');
     Object.keys(options).forEach((key) => {
       this.ctx[key] = options[key];
     });
@@ -65,6 +74,7 @@ class StrokeLine {
     this.last = { x: 0, y: 0 };
     this.queue = [];
     this.drawing = false;
+    this.setDrawType('draw');
   }
 
   setEvents() {

@@ -17,6 +17,8 @@
         <button id="stop">stop</button>
         <button id="clear">clear</button>
         <button id="out">out</button>
+        <button id="draw">draw</button>
+        <button id="elase">elase</button>
       </div>
       <div class="canvas-wrap">
         <canvas id="drawarea" width="1000" height="1000"></canvas>
@@ -37,6 +39,15 @@
         document.getElementById('stop')
           .addEventListener('click', () => {
             inst.stop();
+          });
+
+        document.getElementById('elase')
+          .addEventListener('click', () => {
+            inst.setDrawType('elase');
+          });
+        document.getElementById('draw')
+          .addEventListener('click', () => {
+            inst.setDrawType('draw');
           });
 
         document.getElementById('clear')
